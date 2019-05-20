@@ -4,6 +4,7 @@
 #include "player.h"
 #include "ripper.h"
 #include "volume.h"
+#include "radio.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -26,16 +27,21 @@ int main()
 
     Player player;
     Ripper ripper;
+    Radio radio(player);
     Status status(player, ripper);
 
     ws.register_resource("/cgi-bin/status", &status);
     ws.register_resource("/cgi-bin/player", &player);
     ws.register_resource("/cgi-bin/ripper", &ripper);
     ws.register_resource("/cgi-bin/volume", &volume);
+    ws.register_resource("/cgi-bin/radio", &radio);
 
 
-
-    ws.start(true);
+    try {
+        ws.start(true);
+    } catch (...) {
+        std::cerr << "Failed to start webserver" << std::endl;
+    }
 
     return 0;
 }

@@ -1,0 +1,74 @@
+/* Channel config */
+button.ch     { min-width: 20px; width: 100%; height:  80px; font-size: 100%; }
+td.current_channel { text-align: center; font-size: 28px; height: 40px; }
+
+/* Radio config */
+select.radio_select { height: 80px; font-size: 100%; }
+img.radio_img { width: 30px; height:30px }
+button.radio_btn { width: 100%; font-size: 100%; }
+
+
+
+/* Menu Bar - curtisy w3schools */
+ul.menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li.menu {
+  float: left;
+  border-right: 1px solid #bbb;
+}
+
+li.menu:last-child {
+  border-right: none;
+}
+
+li.menu a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 8px 8px;
+  text-decoration: none;
+}
+
+li.menu a:hover {
+  background-color: #111;
+}
+
+a.active {
+  background-color: #4CAF50;
+}
+
+
+/* Volume Controls */
+button.vol    { min-width: 20px; width: 100%; height:  80px; font-size: 100%; }
+button.volall { min-width: 20px; width: 100%; height: 250px; font-size: 100%; }
+
+input[type="range"] {
+
+  margin: auto;
+  -webkit-appearance: none;
+  position: relative;
+  overflow: hidden;
+  height: 80px;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 0; /* iOS */
+}
+
+::-webkit-slider-runnable-track {
+  background: blue;
+}
+
+::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 80px;
+  background: #fff;
+  box-shadow: -100vw 0 0 100vw blue;
+  border: 2px solid #999; /* 1 */
+}

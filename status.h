@@ -3,6 +3,7 @@
 
 #include "ripper.h"
 #include "player.h"
+#include "radio.h"
 
 #include <httpserverpp>
 

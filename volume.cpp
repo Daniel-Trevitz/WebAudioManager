@@ -1,7 +1,8 @@
 #include "volume.h"
+#include "async_process.h"
+#include "bad_request.h"
 
 #include <iostream>
-#include "async_process.h"
 
 const char *Volume::address[Volume::amps] =
 {
@@ -49,10 +50,7 @@ const std::shared_ptr<httpserver::http_response> Volume::render(const httpserver
             }
         }
         catch (...) {
-            using namespace httpserver;
-            return std::shared_ptr<http_response>(new http_response(
-                                                      http::http_utils::http_bad_request,
-                                                      http::http_utils::text_plain));
+            return bad_request();
         }
 
         if(args.count("inc0"))
@@ -84,9 +82,9 @@ const std::shared_ptr<httpserver::http_response> Volume::render(const httpserver
     }
 
     const std::string str =
-            "volume_0 = " + std::to_string(m_volume[0]) + ";\n" +
-            "volume_1 = " + std::to_string(m_volume[1]) + ";\n" +
-            "volume_2 = " + std::to_string(m_volume[2]) + ";";
+            std::to_string(m_volume[0]) + ";" +
+            std::to_string(m_volume[1]) + ";" +
+            std::to_string(m_volume[2]);
 
     return std::shared_ptr<httpserver::http_response>(new httpserver::string_response(str));
 }

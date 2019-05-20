@@ -1,4 +1,5 @@
 #include "channel.h"
+#include "bad_request.h"
 
 #include <iostream>
 #include <fstream>
@@ -26,7 +27,12 @@ bool Channel::set(std::string channel)
 
 static void write(const char *value, int pin)
 {
+#ifdef SIMULATION
+    auto file = "/dev/null";
+    (void)pin;
+#else
     auto file = "/sys/class/gpio/gpio" + std::to_string(pin) + "/value";
+#endif
 
     std::ofstream myfile;
     myfile.open (file);
@@ -82,18 +88,10 @@ const std::shared_ptr<http_response> Channel::render(const http_request &req)
     std::string resp;
 
     auto args = req.get_args();
-    if(args.count("set"))
+    if(args.count("set") && !set(args["set"]))
     {
-       if(!set(args["set"]))
-       {
-           return std::shared_ptr<http_response>(new http_response(
-                                                     http::http_utils::http_bad_request,
-                                                     http::http_utils::text_plain));
-       }
-
+        return bad_request();
     }
 
-    resp = "channel=" + std::to_string(get()) + ";";
-
-    return std::shared_ptr<http_response>(new string_response(resp));
+    return std::shared_ptr<http_response>(new string_response(std::to_string(get())));
 }

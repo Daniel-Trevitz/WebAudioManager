@@ -2,8 +2,15 @@ PROJECT(WebAudioManager)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
 SET(CMAKE_CXX_STANDARD 11)
 
-INCLUDE(/home/daniel/Programs/libhttpserver/_install_arm/share/cmake/Modules/FindLibHttpServer.cmake)
-INCLUDE_DIRECTORIES(/home/daniel/Programs/libmicrohttpd/_install/include/)
+if(SIMULATION)
+    INCLUDE(/home/daniel/Programs/libhttpserver/_install_x86/share/cmake/Modules/FindLibHttpServer.cmake)
+    SET(MICROHTTPD /usr/lib/x86_64-linux-gnu/libmicrohttpd.so.12)
+    add_definitions(-DSIMULATION)
+ELSE()
+    INCLUDE(/home/daniel/Programs/libhttpserver/_install_arm/share/cmake/Modules/FindLibHttpServer.cmake)
+    INCLUDE_DIRECTORIES(/home/daniel/Programs/libmicrohttpd/_install/include/)
+    SET(MICROHTTPD /home/daniel/Programs/libmicrohttpd/_install/lib/libmicrohttpd.so)
+ENDIF()
 
 SET(CPP_FILES
     main.cpp
@@ -16,15 +23,21 @@ SET(CPP_FILES
     player.cpp player.h
     ripper.cpp ripper.h
     volume.cpp volume.h
+    tunein.cpp tunein.h
+    radio.cpp radio.h
+    bad_request.cpp bad_request.h
 )
 
 SET(HTML_FILES
     www/index.html
+    www/radio.html
+    www/style.css
+    www/interface.js
     www/jquery-3.3.1.min.js
 )
 
 ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${CPP_FILES})
-TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} PRIVATE ${LIBHTTPSERVER_LIBRARIES} /home/daniel/Programs/libmicrohttpd/_install/lib/libmicrohttpd.so)
+TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} PRIVATE ${LIBHTTPSERVER_LIBRARIES} ${MICROHTTPD} curl curlpp)
 TARGET_INCLUDE_DIRECTORIES(${CMAKE_PROJECT_NAME} PRIVATE ${LIBHTTPSERVER_INCLUDE_DIRS}/)
 
 ADD_CUSTOM_TARGET(HTML_Files SOURCES ${HTML_FILES})
