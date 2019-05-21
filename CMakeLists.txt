@@ -22,7 +22,6 @@ SET(CPP_FILES
     directory_server.cpp directory_server.h
     async_process.cpp async_process.h
     channel.cpp channel.h
-    status.cpp status.h
     player.cpp player.h
     ripper.cpp ripper.h
     volume.cpp volume.h
