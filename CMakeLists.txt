@@ -18,7 +18,6 @@ ENDIF()
 
 SET(CPP_FILES
     main.cpp
-    index_html.cpp index_html.h
     file_response.cpp file_response.h
     directory_server.cpp directory_server.h
     async_process.cpp async_process.h
