@@ -1,0 +1,8 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP EC2-3NU
+D DPDT Through Hole Non-Latching Relay, 2 A, 3V dc
+F https://componentsearchengine.com/Datasheets/1/EC2-3NU.pdf
+$ENDCMP
+#
+#End Doc Library

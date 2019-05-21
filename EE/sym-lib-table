@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name IS31FL3218-GRLS2)(type Legacy)(uri /home/daniel/Projects/EE/Libs/IS31FL3218-GRLS2.lib)(options "")(descr ""))
+  (lib (name EC2-3NU)(type Legacy)(uri ${KIPRJMOD}/EC2-3NU.lib)(options "")(descr ""))
+)

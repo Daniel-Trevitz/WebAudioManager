@@ -1,0 +1,28 @@
+Drill report for /home/daniel/Projects/EE/ThorntonAudio/ThorntonAudio.kicad_pcb
+Created on Tue 16 Apr 2019 07:48:11 PM EDT
+
+Copper Layer Stackup:
+    =============================================================
+    L1 :  F.Cu                      front
+    L2 :  B.Cu                      back
+
+
+Drill file 'ThorntonAudio-PTH.drl' contains
+    plated through holes:
+    =============================================================
+    T1  0.40mm  0.016"  (34 holes)
+    T2  0.80mm  0.031"  (42 holes)
+    T3  1.00mm  0.039"  (91 holes)
+    T4  1.50mm  0.059"  (12 holes)
+    T5  2.50mm  0.098"  (5 holes)
+
+    Total plated holes count 184
+
+
+Drill file 'ThorntonAudio-NPTH.drl' contains
+    unplated through holes:
+    =============================================================
+    T1  2.70mm  0.106"  (4 holes)
+    T2  4.30mm  0.169"  (4 holes)
+
+    Total unplated holes count 8
