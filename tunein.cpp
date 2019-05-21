@@ -137,4 +137,22 @@ std::vector<result> navigate(std::string url)
     return data;
 }
 
+std::string getPlayStream(const result &res)
+{
+    if(!res.isStation)
+    {
+        std::cerr << __PRETTY_FUNCTION__ << " Invalid use: " << res.url << std::endl;
+        return ""; // tut tut
+    }
+
+    bool ok;
+    std::string s = getURL(res.url, ok);
+    if(!ok)
+    {
+        std::cerr << __PRETTY_FUNCTION__ << " Failed to load stream: " << res.url << std::endl;
+    }
+
+    return s.substr(0, s.find('\n'));
+}
+
 } // namespace TuneIN

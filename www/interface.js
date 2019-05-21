@@ -90,6 +90,15 @@ function getVolume()
     });
 }
 
+function mute()
+{
+    $.ajax({
+        type:'get',
+        url:'cgi-bin/volume?mute',
+        success: function(data) { updateVolumeHTML(data); }
+    });
+}
+
 function updateVolume()
 {
     vol0 = document.getElementById("volume0").value;
@@ -106,29 +115,97 @@ function updateVolume()
 function updateVolumeHTML(data)
 {
     var volume = data.split(";");
+    var mute = volume[3];
     document.getElementById("volume0").value = volume[0];
     document.getElementById("volume1").value = volume[1];
     document.getElementById("volume2").value = volume[2];
+
+    if(mute === "0")
+    {
+        document.getElementById("menu_mute").src = "/not_mute.png"
+    }
+    else
+    {
+        document.getElementById("menu_mute").src = "/mute.png"
+    }
 }
 
 /*********************************************************************/
 /* Player code */
 
-function startPlay()
+function startCD()
 {
-
+    setChannel(4);
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/player?play_cd',
+      success: function(data) { }
+    });
 }
 
-function stopPlay()
+function startPlayer()
 {
-
+    setChannel(4);
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/player?play',
+      success: function(data) { }
+    });
 }
 
-function isPlaying()
+function pausePlayer()
 {
-
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/player?pause',
+      success: function(data) { }
+    });
 }
 
+function stopPlayer()
+{
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/player?stop',
+      success: function(data) { }
+    });
+}
+
+function nextCDtrack()
+{
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/player?next',
+      success: function(data) { }
+    });
+}
+
+function prevCDtrack()
+{
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/player?prev',
+      success: function(data) { }
+    });
+}
+
+function debugPlayer()
+{
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/player?debug',
+      success: function(data) { }
+    });
+}
+
+function cdInfo()
+{
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/player?cd_info',
+      success: function(data) { }
+    });
+}
 
 /*********************************************************************/
 /* Player code */
@@ -156,9 +233,10 @@ function getRadioInformation()
 // Play the station
 function selectRadioStation(id)
 {
+    setChannel(4);
     $.ajax({
       type:'get',
-      url:'cgi-bin/radio?select=' + id,
+      url:'cgi-bin/radio?play=' + id,
       success: function(data) { updateRadio(data); }
     });
 }

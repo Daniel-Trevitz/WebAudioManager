@@ -49,7 +49,8 @@ public:
         if(!r.isStation)
             return false; // not a station... so why did you ask?
 
-        if(!player.play(r.url))
+        //if(!player.play(TuneIN::getPlayStream(r))) // when not using vlc use this
+        if(!player.play(r.url)) // vlc can handle these urls, but nothing else can
             return false;
 
         nowPlaying = r;
@@ -69,8 +70,23 @@ public:
     {
         std::stringstream s;
         s << "<table id=radio>"
-          << "<tr>"
-          << "<td>"
+             "<tr>"
+             "<td><button class=radio id=start onclick='startPlayer()'>Start</button></td>"
+             "<td><button class=radio id=pause onclick='pausePlayer()'>Pause</button></td>"
+             "<td><button class=radio id=stop  onclick='stopPlayer()' >Stop</button></td>"
+             "</tr>"
+             "</table>";
+
+
+        s << "<table id=radio>"
+             "<tr>";
+
+        if(!nowPlaying.img.empty())
+        {
+            s << "<td><img class=radio_img src=\"" << nowPlaying.img << "\"></img></td>";
+        }
+
+        s << "<td>"
           << nowPlaying.name
           << "</td>"
           << "</tr>"
@@ -90,12 +106,10 @@ public:
             const auto &e = lastResults.at(i);
             if(e.isStation)
             {
-                std::cout << "Station: " << e.name << std::endl;
                 makeStation(i, e, stations);
             }
             else
             {
-                std::cout << "Menu: " << e.name << std::endl;
                 makeMenu(i, e, menu);
             }
         }

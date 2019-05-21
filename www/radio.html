@@ -4,6 +4,7 @@
     <script type="text/javascript" src="/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="/interface.js"></script>
     <link rel="stylesheet" href="style.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
     <script type="text/javascript">
         function getStatus()
@@ -15,30 +16,33 @@
 
 </head>
 <body onload="getStatus()">
-<ul class=menu>
-  <li class=menu><a href="" class="active">Channel</a></li>
-  <li class=menu><a href="/radio.html">Net Radio</a></li>
-  <li class=menu><a href="/cdrom">Play CD</a></li>
-  <li class=menu><a href="/ripper">Rip CD</a></li>
-</ul>
+
+    <ul class=menu>
+        <li class=menu><a href="/index.html"                >Channel</a></li>
+        <li class=menu><a href="/radio.html"  class="active">Net Radio</a></li>
+        <li class=menu><a href="/cdrom.html"                >CD</a></li>
+        <li class=menu><a href="/ripper.html"               >Rip CD</a></li>
+        <li class=menu_last><img id="menu_mute" onclick="mute();" src=/mute.png></img></li>
+    </ul>
+
     <table width=100%>
-    <tr>
-        <td width=10% rowspan=3><button class="volall" onclick="setVolumeAll(-1);">-</button></td>
-        <td width=10%><button class="vol" onclick="setVolume(0, -1);">-</button></td>
-        <td><input type="range" id="volume0" value="0" min=0 max=100 onchange="updateVolume()"></td>
-        <td width=10%><button class="vol" onclick="setVolume(0, +1);">+</button></td>
-        <td width=10% rowspan=3><button class="volall" onclick="setVolumeAll(+1);">+</button></td>
-    </tr>
-    <tr>
-        <td width=10%><button class="vol" onclick="setVolume(1, -1);">-</button></td>
-        <td><input type="range" id="volume1" value="0" min=0 max=100 onchange="updateVolume()"></td>
-        <td width=10%><button class="vol" onclick="setVolume(1, +1);">+</button></td>
-    </tr>
-    <tr>
-        <td width=10%><button class="vol" onclick="setVolume(2, -1);">-</button></td>
-        <td><input type="range" id="volume2" value="0" min=0 max=100 onchange="updateVolume()"></td>
-        <td width=10%><button class="vol" onclick="setVolume(2, +1);">+</button></td>
-    </tr>
+        <tr>
+            <td width=10% rowspan=3><button class="volall" onclick="setVolumeAll(-1);">-</button></td>
+            <td width=10%><button class="vol" onclick="setVolume(0, -1);">-</button></td>
+            <td width=60%><input type="range" id="volume0" value="0" min=0 max=100 onchange="updateVolume()"></td>
+            <td width=10%><button class="vol" onclick="setVolume(0, +1);">+</button></td>
+            <td width=10% rowspan=3><button class="volall" onclick="setVolumeAll(+1);">+</button></td>
+        </tr>
+        <tr>
+            <td width=10%><button class="vol" onclick="setVolume(1, -1);">-</button></td>
+            <td width=60%><input type="range" id="volume1" value="0" min=0 max=100 onchange="updateVolume()"></td>
+            <td width=10%><button class="vol" onclick="setVolume(1, +1);">+</button></td>
+        </tr>
+        <tr>
+            <td width=10%><button class="vol" onclick="setVolume(2, -1);">-</button></td>
+            <td width=60%><input type="range" id="volume2" value="0" min=0 max=100 onchange="updateVolume()"></td>
+            <td width=10%><button class="vol" onclick="setVolume(2, +1);">+</button></td>
+        </tr>
     </table>
 
     <div id="radio">

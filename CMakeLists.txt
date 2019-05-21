@@ -7,9 +7,13 @@ if(SIMULATION)
     SET(MICROHTTPD /usr/lib/x86_64-linux-gnu/libmicrohttpd.so.12)
     add_definitions(-DSIMULATION)
 ELSE()
-    INCLUDE(/home/daniel/Programs/libhttpserver/_install_arm/share/cmake/Modules/FindLibHttpServer.cmake)
-    INCLUDE_DIRECTORIES(/home/daniel/Programs/libmicrohttpd/_install/include/)
-    SET(MICROHTTPD /home/daniel/Programs/libmicrohttpd/_install/lib/libmicrohttpd.so)
+    set(LIBHTTPSERVER_LIBRARIES httpserver)
+    set(LIBHTTPSERVER_INCLUDE_DIRS )
+
+    INCLUDE_DIRECTORIES(/home/daniel/ToolChains/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/sysroot/include)
+    LINK_DIRECTORIES(/home/daniel/ToolChains/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/sysroot/lib)
+
+    SET(MICROHTTPD microhttpd)
 ENDIF()
 
 SET(CPP_FILES
@@ -26,14 +30,19 @@ SET(CPP_FILES
     tunein.cpp tunein.h
     radio.cpp radio.h
     bad_request.cpp bad_request.h
+    cdinfo.cpp cdinfo.h
 )
 
 SET(HTML_FILES
     www/index.html
     www/radio.html
+    www/cdrom.html
+    www/ripper.html
     www/style.css
     www/interface.js
     www/jquery-3.3.1.min.js
+    www/mute.png
+    www/not_mute.png
 )
 
 ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${CPP_FILES})

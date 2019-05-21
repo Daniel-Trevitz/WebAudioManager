@@ -25,6 +25,10 @@ const std::shared_ptr<httpserver::http_response> Volume::render(const httpserver
     {
         getVolumes();
     }
+    else if(args.count("mute"))
+    {
+        setMute(!m_muted);
+    }
     else if(args.count("inc"))
     {
         increaseVolumes(+1);
@@ -84,7 +88,8 @@ const std::shared_ptr<httpserver::http_response> Volume::render(const httpserver
     const std::string str =
             std::to_string(m_volume[0]) + ";" +
             std::to_string(m_volume[1]) + ";" +
-            std::to_string(m_volume[2]);
+            std::to_string(m_volume[2]) + ";" +
+            (m_muted ? "1" : "0");
 
     return std::shared_ptr<httpserver::http_response>(new httpserver::string_response(str));
 }
@@ -160,6 +165,7 @@ void Volume::increaseVolume(int speaker, int delta)
 // Mute by settin the volumes to zero, but not overwriting the previous state
 void Volume::setMute(bool mute)
 {
+    m_muted = mute;
     if(mute)
     {
         for(int i = 0; i < amps; i++)

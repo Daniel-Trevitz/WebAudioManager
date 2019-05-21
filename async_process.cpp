@@ -26,7 +26,8 @@ void async_process::close_pipes()
     pipe_stderr[1] = 0;
 }
 
-async_process::async_process(const std::string &proc_name, const std::string &arg1, const std::string &arg2, const std::string &arg3) :
+async_process::async_process(const std::string &proc_name, const std::string &arg1, const std::string &arg2,
+                             const std::string &arg3, const std::string &arg4, const std::string &arg5) :
     m_process(proc_name)
 {
     m_args.push_back(proc_name);
@@ -38,6 +39,10 @@ async_process::async_process(const std::string &proc_name, const std::string &ar
         m_args.push_back(arg2);
         if(arg3.empty()) break;
         m_args.push_back(arg3);
+        if(arg4.empty()) break;
+        m_args.push_back(arg4);
+        if(arg5.empty()) break;
+        m_args.push_back(arg5);
 
     } while(false);
 }
@@ -97,11 +102,13 @@ bool async_process::exec()
     std::cout << std::endl;
 #endif
 
-    execv(m_process.c_str(), (char * const *)argv.data());
+    int ret = execv(m_process.c_str(), (char * const *)argv.data());
+    if(ret < 0)
+        std::cerr << "Failed to exec: " << m_process << " errno: " << errno << std::endl;
     exit(0); // child done
 }
 
-bool async_process::active()
+bool async_process::active() const
 {
     if(procID == 0)
         return false;
@@ -136,13 +143,13 @@ void async_process::kill()
 std::string async_process::readStdOut()
 {
     char buffer[4096];
-
+    memset(buffer, 0, sizeof(buffer));
     ssize_t count = read(pipe_stdout[0], buffer, sizeof(buffer));
 
     // TODO: Error handling... somehow
     // if ((count == -1) && (errno != EINTR))
     //    return "";
-    if(count == -1)
+    if(count < 1)
         return "";
 
     return std::string(buffer);
@@ -151,13 +158,13 @@ std::string async_process::readStdOut()
 std::string async_process::readStdErr()
 {
     char buffer[4096];
-
+    memset(buffer, 0, sizeof(buffer));
     ssize_t count = read(pipe_stderr[0], buffer, sizeof(buffer));
 
     // TODO: Error handling... somehow
     // if ((count == -1) && (errno != EINTR))
     //    return "";
-    if(count == -1)
+    if(count < 1)
         return "";
 
     return std::string(buffer);

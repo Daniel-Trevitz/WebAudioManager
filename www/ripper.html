@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Thornton Audio</title>
+    <title>Thornton CD Ripper</title>
     <script type="text/javascript" src="/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="/interface.js"></script>
     <link rel="stylesheet" href="style.css"/>
@@ -9,8 +9,6 @@
     <script type="text/javascript">
         function getStatus()
         {
-            channel = -1;
-            getChannel();
             getVolume();
         }
     </script>
@@ -18,33 +16,12 @@
 <body onload="getStatus()">
 
     <ul class=menu>
-        <li class=menu><a href="/index.html"  class="active">Channel</a></li>
+        <li class=menu><a href="/index.html"                >Channel</a></li>
         <li class=menu><a href="/radio.html"                >Net Radio</a></li>
         <li class=menu><a href="/cdrom.html"                >CD</a></li>
-        <li class=menu><a href="/ripper.html"               >Rip CD</a></li>
+        <li class=menu><a href="/ripper.html" class="active">Rip CD</a></li>
         <li class=menu_last><img id="menu_mute" onclick="mute();" src=/mute.png></img></li>
     </ul>
-
-    <table width=100%>
-        <tr>
-            <td class=current_channel id=current_channel_top colspan=6></td>
-        </tr>
-        <tr>
-            <td class=current_channel id=current_channel_bot colspan=6></td>
-        </tr>
-        <tr>
-            <td width=33% ><button class="ch" onclick="setChannel(-1);">Off</button></td>
-            <td width=33% ><button class="ch" onclick="setChannel(0);">Radio</button></td>
-            <td width=33% ><button class="ch" onclick="setChannel(1);">Cassette Deck</button></td>
-        </tr>
-        <tr>
-            <td width=33% ><button class="ch" onclick="setChannel(2);">Phonograph</button></td>
-            <td width=33% ><button class="ch" onclick="setChannel(3);">Multi Disc</button></td>
-            <td width=33% ><button class="ch" onclick="setChannel(4);">AudioRx</button></td>
-        </tr>
-    </table>
-
-    <br/>
 
     <table width=100%>
         <tr>
@@ -65,11 +42,6 @@
             <td width=10%><button class="vol" onclick="setVolume(2, +1);">+</button></td>
         </tr>
     </table>
-
-
-    <br/>
-
-    <div id=player></div>
 
 </body>
 </html>

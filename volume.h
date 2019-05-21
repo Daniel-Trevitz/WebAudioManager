@@ -8,6 +8,7 @@ class Volume : public httpserver::http_resource
     static const int amps = 3;
     static const char *address[amps];
 
+    bool m_muted = false;
     int m_volume[amps] = { 0, 0, 0 };
     void set(int speaker, int volume);
 public:

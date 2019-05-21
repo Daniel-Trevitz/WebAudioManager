@@ -5,6 +5,8 @@
 #include "ripper.h"
 #include "volume.h"
 #include "radio.h"
+#include "async_process.h"
+#include "cdinfo.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -13,6 +15,9 @@
 
 int main()
 {
+    async_process dbus_launch("/usr/bin/dbus-launch", "--binary-syntax");
+    dbus_launch.exec();
+
     httpserver::webserver ws = httpserver::create_webserver(8080);
 
     char cwd[1024];
@@ -34,8 +39,16 @@ int main()
     ws.register_resource("/cgi-bin/player", &player);
     ws.register_resource("/cgi-bin/ripper", &ripper);
     ws.register_resource("/cgi-bin/volume", &volume);
-    ws.register_resource("/cgi-bin/radio", &radio);
+    ws.register_resource("/cgi-bin/radio",  &radio);
 
+    {
+        dbus_launch.wait();
+        std::string key = dbus_launch.readStdOut();
+        setenv("DBUS_SESSION_BUS_ADDRESS", key.c_str(), 1);
+        std::cout << key << std::endl;
+    }
+
+    std::cout << "Starting webserver" << std::endl;
 
     try {
         ws.start(true);

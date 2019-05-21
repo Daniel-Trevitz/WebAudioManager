@@ -16,11 +16,12 @@ class async_process
     void close_pipes();
 
 public:
-    async_process(const std::string &proc_name, const std::string &arg1 = "", const std::string &arg2 = "", const std::string &arg3 = "");
+    async_process(const std::string &proc_name, const std::string &arg1 = "", const std::string &arg2 = "",
+                  const std::string &arg3 = "", const std::string &arg4 = "", const std::string &arg5 = "");
     async_process(const std::string &proc_name, const std::vector<std::string> &args);
     ~async_process();
     bool exec();
-    bool active();
+    bool active() const;
     void wait();
     void stop();
     void kill();

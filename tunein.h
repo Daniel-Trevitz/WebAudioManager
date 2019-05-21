@@ -16,6 +16,8 @@ namespace TuneIN
     };
 
     std::vector<result> navigate(std::string url);
+
+    std::string getPlayStream(const result &res);
 };
 
 #endif // TUNEIN_H
