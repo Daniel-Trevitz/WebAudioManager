@@ -18,17 +18,22 @@ ENDIF()
 
 SET(CPP_FILES
     main.cpp
-    file_response.cpp file_response.h
-    directory_server.cpp directory_server.h
-    async_process.cpp async_process.h
-    channel.cpp channel.h
-    player.cpp player.h
-    ripper.cpp ripper.h
-    volume.cpp volume.h
-    tunein.cpp tunein.h
-    radio.cpp radio.h
-    bad_request.cpp bad_request.h
-    cdinfo.cpp cdinfo.h
+
+    utils/json.hpp
+    utils/async_process.cpp utils/async_process.h
+
+    httpserver/bad_request.cpp      httpserver/bad_request.h
+    httpserver/file_response.cpp    httpserver/file_response.h
+    httpserver/directory_server.cpp httpserver/directory_server.h
+
+    interface/channel.cpp interface/channel.h
+    interface/player.cpp  interface/player.h
+    interface/ripper.cpp  interface/ripper.h
+    interface/volume.cpp  interface/volume.h
+    interface/radio.cpp   interface/radio.h
+
+    sources/tunein.cpp sources/tunein.h
+    sources/cdinfo.cpp sources/cdinfo.h
 )
 
 SET(HTML_FILES
@@ -45,7 +50,7 @@ SET(HTML_FILES
 
 ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${CPP_FILES})
 TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} PRIVATE ${LIBHTTPSERVER_LIBRARIES} ${MICROHTTPD} curl curlpp)
-TARGET_INCLUDE_DIRECTORIES(${CMAKE_PROJECT_NAME} PRIVATE ${LIBHTTPSERVER_INCLUDE_DIRS}/)
+TARGET_INCLUDE_DIRECTORIES(${CMAKE_PROJECT_NAME} PRIVATE ${LIBHTTPSERVER_INCLUDE_DIRS}/ ${CMAKE_SOURCE_DIR})
 
 ADD_CUSTOM_TARGET(HTML_Files SOURCES ${HTML_FILES})
 

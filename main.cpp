@@ -1,11 +1,12 @@
-#include "directory_server.h"
-#include "channel.h"
-#include "player.h"
-#include "ripper.h"
-#include "volume.h"
-#include "radio.h"
-#include "async_process.h"
-#include "cdinfo.h"
+#include "utils/async_process.h"
+
+#include "httpserver/directory_server.h"
+
+#include "interface/channel.h"
+#include "interface/player.h"
+#include "interface/ripper.h"
+#include "interface/volume.h"
+#include "interface/radio.h"
 
 #include <iostream>
 #include <unistd.h>

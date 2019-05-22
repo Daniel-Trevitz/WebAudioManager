@@ -1,6 +1,6 @@
 #include "radio.h"
-#include "tunein.h"
-#include "bad_request.h"
+#include "sources/tunein.h"
+#include "httpserver/bad_request.h"
 
 #include <sstream>
 #include <iostream>

@@ -1,7 +1,7 @@
 #ifndef CHANNEL_H
 #define CHANNEL_H
 
-#include "httpserverpp"
+#include <httpserverpp>
 #include "volume.h"
 
 class Channel : public httpserver::http_resource

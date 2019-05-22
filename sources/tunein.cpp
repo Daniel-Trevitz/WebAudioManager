@@ -8,7 +8,7 @@
 #include <curlpp/Easy.hpp>
 #include <curlpp/Options.hpp>
 
-#include "json.hpp"
+#include "utils/json.hpp"
 
 using json = nlohmann::json;
 
