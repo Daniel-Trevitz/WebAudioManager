@@ -1,6 +1,14 @@
 #include "cdinfo.h"
 #include "utils/async_process.h"
 
+#include <climits>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+#include <sys/ioctl.h>
+#include <linux/cdrom.h>
+
 #include <iostream>
 #include <stdexcept>
 
@@ -257,4 +265,43 @@ int CDInfo::length_s() const
 std::string CDInfo::title() const
 {
     return m_title;
+}
+
+std::vector<std::string> CDInfo::tracks() const
+{
+    return m_tracks;
+}
+
+std::string CDInfo::toHTML() const
+{
+    std::string s;
+
+    s = "<h1>" + m_title + "</h1>" +
+            "<ol type=1>";
+
+    for(auto i : m_tracks)
+        s += "<li>" + i + "</li>";
+
+    s += "</ol>";
+
+    return s;
+}
+
+bool CDInfo::cdInstalled()
+{
+    int fd = open("/dev/cdrom", O_RDWR);
+    if(fd < 0)
+        return false;
+
+    int result = ioctl(fd, CDROM_DRIVE_STATUS, CDSL_NONE);
+
+    switch(result) {
+    case CDS_DISC_OK: return true;
+    case CDS_NO_INFO:   break;
+    case CDS_NO_DISC:   break;
+    case CDS_TRAY_OPEN: break;
+    case CDS_DRIVE_NOT_READY: break;
+    default: break;
+    }
+    return false;
 }

@@ -29,6 +29,10 @@ public:
     bool valid() const;
     int length_s() const;
     std::string title() const;
+    std::vector<std::string> tracks() const;
+    std::string toHTML() const;
+
+    static bool cdInstalled();
 };
 
 #endif // CDINFO_H

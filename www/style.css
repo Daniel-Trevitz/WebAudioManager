@@ -1,9 +1,11 @@
 /* Channel config */
-button.ch     { min-width: 20px; width: 100%; height:  80px; font-size: 100%; }
+button.ch          { min-width: 20px; width: 100%; height:  80px; font-size: 100%; border: none; background-color: #333333; color: white; }
+button.ch_active   { min-width: 20px; width: 100%; height:  80px; font-size: 100%; border: none; background-color: #4CAF50; color: white; }
 td.current_channel { text-align: center; font-size: 28px; height: 40px; }
 
 /* Radio config */
-button.radio { width: 100%; height: 60px; font-size: 100%; }
+button.radio        { width: 100%; height: 60px; font-size: 100%; border: none; background-color: #333333; color: white; }
+button.radio_active { width: 100%; height: 60px; font-size: 100%; border: none; background-color: #4CAF50; color: white; }
 
 select.radio_select { height: 80px; font-size: 100%; }
 img.radio_img { width: 30px; height:30px }
@@ -56,8 +58,8 @@ a.active {
 
 
 /* Volume Controls */
-button.vol    { min-width: 20px; width: 100%; height:  80px; font-size: 100%; }
-button.volall { min-width: 20px; width: 100%; height: 250px; font-size: 100%; }
+button.vol    { min-width: 20px; width: 100%; height:  80px; font-size: 100%; border: none; background-color: #aaaaaa; color: white; }
+button.volall { min-width: 20px; width: 100%; height: 250px; font-size: 100%; border: none; background-color: #aaaaaa; color: white; }
 
 input[type="range"] {
 

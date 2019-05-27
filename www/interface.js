@@ -25,7 +25,37 @@ function updateChannelHTML(channel)
     chtext = getChannelName(channel);
 
     current_channel_top = document.getElementById("current_channel_top");
+
+    if(current_channel_top == null)
+        return;
+
+
+    current_channel_top = document.getElementById("current_channel_top");
     current_channel_bot = document.getElementById("current_channel_bot");
+
+    ch_o = document.getElementById("ch-o");
+    ch_0 = document.getElementById("ch-0");
+    ch_1 = document.getElementById("ch-1");
+    ch_2 = document.getElementById("ch-2");
+    ch_3 = document.getElementById("ch-3");
+    ch_4 = document.getElementById("ch-4");
+
+    ch_o.className = "ch";
+    ch_0.className = "ch";
+    ch_1.className = "ch";
+    ch_2.className = "ch";
+    ch_3.className = "ch";
+    ch_4.className = "ch";
+
+    switch(channel)
+    {
+    case "0": ch_0.className = "ch_active"; break;
+    case "1": ch_1.className = "ch_active"; break;
+    case "2": ch_2.className = "ch_active"; break;
+    case "3": ch_3.className = "ch_active"; break;
+    case "4": ch_4.className = "ch_active"; break;
+    default:  ch_o.className = "ch_active"; break;
+    }
 
     if(chtext === "")
     {
@@ -139,7 +169,7 @@ function startCD()
     $.ajax({
       type:'get',
       url:'cgi-bin/player?play_cd',
-      success: function(data) { }
+      success: function(data) { updateCD_PlayerStatus(data); }
     });
 }
 
@@ -149,7 +179,7 @@ function startPlayer()
     $.ajax({
       type:'get',
       url:'cgi-bin/player?play',
-      success: function(data) { }
+      success: function(data) { updateCD_PlayerStatus(data); }
     });
 }
 
@@ -158,7 +188,7 @@ function pausePlayer()
     $.ajax({
       type:'get',
       url:'cgi-bin/player?pause',
-      success: function(data) { }
+      success: function(data) { updateCD_PlayerStatus(data); }
     });
 }
 
@@ -167,9 +197,12 @@ function stopPlayer()
     $.ajax({
       type:'get',
       url:'cgi-bin/player?stop',
-      success: function(data) { }
+      success: function(data) { updateCD_PlayerStatus(data); }
     });
 }
+
+/*********************************************************************/
+/* CD Player code */
 
 function nextCDtrack()
 {
@@ -189,11 +222,11 @@ function prevCDtrack()
     });
 }
 
-function debugPlayer()
+function cdAvaliable()
 {
     $.ajax({
       type:'get',
-      url:'cgi-bin/player?debug',
+      url:'cgi-bin/player?cd_avaliable',
       success: function(data) { }
     });
 }
@@ -203,12 +236,43 @@ function cdInfo()
     $.ajax({
       type:'get',
       url:'cgi-bin/player?cd_info',
-      success: function(data) { }
+      success: function(data) { document.getElementById("cd_info").innerHTML = data; }
     });
 }
 
+function getPlayerStatus()
+{
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/player?cd_avaliable',
+      success: function(data) { updateCD_PlayerStatus(data); }
+    });
+}
+
+function updateCD_PlayerStatus(data)
+{
+    if(data === "playing")
+    {
+        document.getElementById("start").className = "radio_active";
+        document.getElementById("pause").className = "radio";
+        document.getElementById("stop").className  = "radio";
+    }
+    else if(data === "paused")
+    {
+        document.getElementById("start").className = "radio";
+        document.getElementById("pause").className = "radio_active";
+        document.getElementById("stop").className  = "radio";
+    }
+    else
+    {
+        document.getElementById("start").className = "radio";
+        document.getElementById("pause").className = "radio";
+        document.getElementById("stop").className  = "radio_active";
+    }
+}
+
 /*********************************************************************/
-/* Player code */
+/* Radio code */
 
 // initialize the search
 function beginRadio()

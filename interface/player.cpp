@@ -251,6 +251,8 @@ const std::shared_ptr<http_response> Player::render(const http_request &req)
 {
     auto args = req.get_args();
 
+    std::string status;
+
     if(args.count("stop"))
     {
         // Stop whatever is currently playing
@@ -292,22 +294,20 @@ const std::shared_ptr<http_response> Player::render(const http_request &req)
         CDInfo cdinfo;
         if(!cdinfo.valid()) // cddbtool failed :(
             return bad_request();
-
-        std::string title = cdinfo.title();
-        return std::shared_ptr<http_response>(new string_response(title));
+        return std::shared_ptr<http_response>(new string_response(cdinfo.toHTML()));
     }
-    else if(args.count("debug") && proc)
+    else if(args.count("cd_avaliable"))
     {
-        // Stop whatever is currently playing
-        std::cout << proc->readStdOut() << std::endl;
-        std::cerr << proc->readStdErr() << std::endl;
+        if(CDInfo::cdInstalled()) status = "cd";
+        else status = "no";
+
+        return std::shared_ptr<http_response>(new string_response(status));
+
     }
 
-    std::string str = "playing=";
-    if(proc && proc->active())
-        str += "1";
-    else
-        str += "0";
+    if(m_paused) status = "paused";
+    else if(m_playing) status = "playing";
+    else status = "stopped";
 
-    return std::shared_ptr<http_response>(new string_response(str));
+    return std::shared_ptr<http_response>(new string_response(status));
 }
