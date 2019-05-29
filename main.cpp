@@ -13,8 +13,12 @@
 
 #include <httpserver.hpp>
 
+#include "sources/mediamanager.h"
+
 int main()
 {
+    MediaManager media(MEDIA_PATH);
+
     async_process dbus_launch("/usr/bin/dbus-launch", "--binary-syntax");
     dbus_launch.exec();
 

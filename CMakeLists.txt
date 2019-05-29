@@ -5,7 +5,7 @@ SET(CMAKE_CXX_STANDARD 11)
 if(SIMULATION)
     INCLUDE(/home/daniel/Programs/libhttpserver/_install_x86/share/cmake/Modules/FindLibHttpServer.cmake)
     SET(MICROHTTPD /usr/lib/x86_64-linux-gnu/libmicrohttpd.so.12)
-    add_definitions(-DSIMULATION)
+    add_definitions(-DSIMULATION -DMEDIA_PATH="/tmp/mediamanager/")
 ELSE()
     set(LIBHTTPSERVER_LIBRARIES httpserver)
     set(LIBHTTPSERVER_INCLUDE_DIRS )
@@ -13,6 +13,7 @@ ELSE()
     INCLUDE_DIRECTORIES(/home/daniel/ToolChains/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/sysroot/include)
     LINK_DIRECTORIES(/home/daniel/ToolChains/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/sysroot/lib)
 
+    add_definitions(-DMEDIA_PATH="/home/pi/Music/")
     SET(MICROHTTPD microhttpd)
 ENDIF()
 
@@ -20,6 +21,7 @@ SET(CPP_FILES
     main.cpp
 
     utils/json.hpp
+    utils/mkpath.cpp utils/mkpath.h
     utils/async_process.cpp utils/async_process.h
 
     httpserver/bad_request.cpp      httpserver/bad_request.h
@@ -34,6 +36,7 @@ SET(CPP_FILES
 
     sources/tunein.cpp sources/tunein.h
     sources/cdinfo.cpp sources/cdinfo.h
+    sources/mediamanager.cpp sources/mediamanager.h
 )
 
 SET(HTML_FILES
