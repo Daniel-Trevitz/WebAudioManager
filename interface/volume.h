@@ -19,6 +19,7 @@ public:
     void setVolume(int speaker, int volume);
     void getVolumes(); // update volume from ipc
     void setMute(bool mute = true);
+    bool muted() const;
 };
 
 #endif // VOLUME_H

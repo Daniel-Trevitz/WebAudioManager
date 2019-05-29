@@ -51,7 +51,8 @@ bool Channel::set(int channel)
         22
     };
 
-    m_volume.setMute(true);
+    if(!m_volume.muted())
+        m_volume.setMute(true);
 
     for(int i = 0; i < 5; i++)
     {

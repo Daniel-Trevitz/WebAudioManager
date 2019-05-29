@@ -178,6 +178,11 @@ void Volume::setMute(bool mute)
     }
 }
 
+bool Volume::muted() const
+{
+    return m_muted;
+}
+
 void Volume::setVolume(int speaker, int volume)
 {
     if(speaker < 0 || speaker >= amps)
