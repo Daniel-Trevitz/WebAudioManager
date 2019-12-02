@@ -90,10 +90,8 @@ function setVolume(speaker, volumeDelta)
     cmd = volumeDelta === -1 ? 'dec' : 'inc';
     cmd += speaker;
 
-    $.ajax({
-        type:'get',
-        url:'cgi-bin/volume?' + cmd,
-        success: function(data) { updateVolumeHTML(data); }
+    $.getJSON( 'cgi-bin/volume?' + cmd, function( data ) {
+        updateVolumeHTML(data);
     });
 }
 
@@ -104,28 +102,22 @@ function setVolumeAll(volumeDelta)
     else
       dir = 'inc';
 
-    $.ajax({
-      type:'get',
-      url:'cgi-bin/volume?' + dir,
-      success: function(data) { updateVolumeHTML(data); }
+    $.getJSON( 'cgi-bin/volume?' + dir, function( data ) {
+        updateVolumeHTML(data);
     });
 }
 
 function getVolume()
 {
-    $.ajax({
-        type:'get',
-        url:'cgi-bin/volume',
-        success: function(data) { updateVolumeHTML(data); }
+    $.getJSON( 'cgi-bin/volume', function( data ) {
+        updateVolumeHTML(data);
     });
 }
 
 function mute()
 {
-    $.ajax({
-        type:'get',
-        url:'cgi-bin/volume?mute',
-        success: function(data) { updateVolumeHTML(data); }
+    $.getJSON( 'cgi-bin/volume?mute', function( data ) {
+        updateVolumeHTML(data);
     });
 }
 
@@ -135,22 +127,20 @@ function updateVolume()
     vol1 = document.getElementById("volume1").value;
     vol2 = document.getElementById("volume2").value;
 
-    $.ajax({
-      type:'get',
-      url:'cgi-bin/volume?volume0=' + vol0 + '&volume1=' + vol1 + '&volume2=' + vol2,
-      success: function(data) { updateVolumeHTML(data); }
+    cmd='volume0=' + vol0 + '&volume1=' + vol1 + '&volume2=' + vol2
+
+    $.getJSON( 'cgi-bin/volume?' + cmd, function( data ) {
+        updateVolumeHTML(data);
     });
 }
 
 function updateVolumeHTML(data)
 {
-    var volume = data.split(";");
-    var mute = volume[3];
-    document.getElementById("volume0").value = volume[0];
-    document.getElementById("volume1").value = volume[1];
-    document.getElementById("volume2").value = volume[2];
+    document.getElementById("volume0").value = data["0"];
+    document.getElementById("volume1").value = data["1"];
+    document.getElementById("volume2").value = data["2"];
 
-    if(mute === "0")
+    if(data["muted"] === "0")
     {
         document.getElementById("menu_mute").src = "/not_mute.png"
     }
@@ -173,12 +163,33 @@ function startCD()
     });
 }
 
+function getPlayerStatus()
+{
+    setChannel(4);
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/player',
+      success: function(data) { updateCD_PlayerStatus(data); }
+    });
+}
+
 function startPlayer()
 {
     setChannel(4);
     $.ajax({
       type:'get',
       url:'cgi-bin/player?play',
+      success: function(data) { updateCD_PlayerStatus(data); }
+    });
+}
+
+function startCustomPlayer()
+{
+    url = document.getElementById("url_entry").value;
+    setChannel(4);
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/player?url=' + url,
       success: function(data) { updateCD_PlayerStatus(data); }
     });
 }
@@ -240,7 +251,7 @@ function cdInfo()
     });
 }
 
-function getPlayerStatus()
+function getCDStatus()
 {
     $.ajax({
       type:'get',
@@ -249,15 +260,25 @@ function getPlayerStatus()
     });
 }
 
-function updateCD_PlayerStatus(data)
+
+function getPlayerURL(func)
 {
-    if(data === "playing")
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/player?url',
+      success: func
+    });
+}
+
+function updateCD_PlayerStatus(status)
+{
+    if(status === "playing")
     {
         document.getElementById("start").className = "radio_active";
         document.getElementById("pause").className = "radio";
         document.getElementById("stop").className  = "radio";
     }
-    else if(data === "paused")
+    else if(status === "paused")
     {
         document.getElementById("start").className = "radio";
         document.getElementById("pause").className = "radio_active";
@@ -319,4 +340,67 @@ function selectRadioSearch(elem)
 function updateRadio(data)
 {
     document.getElementById("radio").innerHTML = data;
+}
+
+function getRadioURL()
+{
+    f = function(result) {
+        document.getElementById("url_entry").value = result;
+    }
+    getPlayerURL(f);
+}
+
+/*********************************************************************/
+/* Library code */
+
+function getLibrary()
+{
+    $.getJSON( "cgi-bin/library?get_all", function( data ) {
+        var items = [];
+        $.each( data, function( key, val ) {
+          items.push( "<li id='" + key + "'>" + val.name + "</li>" );
+        });
+
+        $( "<ul/>", {
+          "class": "my-new-list",
+          html: items.join( "" )
+        }).appendTo( "body" );
+    });
+}
+
+function getAlbumArtwork(album)
+{
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/library?img=' + album,
+      success: function(data) {  }
+    });
+}
+
+function getAlbumForm()
+{
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/ripper?form',
+      success: function(data) {
+          document.getElementById("ripper").innerHTML = data;
+          $('#myform').ajaxForm(function(response) { postAlbum(event); });
+      }
+    });
+}
+
+function postAlbum(event)
+{
+    /* stop form from submitting normally */
+    event.preventDefault();
+
+    /* Send the data using post with element id name and name2*/
+    var posting = $.post( '/cgi-bin/ripper', {
+                             image: $('#image').val()
+                         });
+
+    /* Put the results in a div */
+    posting.done(function(data) {
+        console.log(data);
+    });
 }

@@ -14,6 +14,8 @@ class CDInfo
     std::string m_basic_genre; // genre as reported by cddb-tool query
     std::string m_genre; // genre as reported by cddb-tool read
 
+    std::string m_errorMessage;
+
     std::vector<std::string> m_tracks; // track names from cddb-tool read
 
     std::string init_discid();
@@ -30,6 +32,9 @@ public:
     int length_s() const;
     std::string title() const;
     std::vector<std::string> tracks() const;
+    std::string genre() const;
+    std::string getError() const;
+
     std::string toHTML() const;
 
     static bool cdInstalled();

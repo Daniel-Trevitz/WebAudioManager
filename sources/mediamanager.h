@@ -29,6 +29,10 @@ public:
 
     static std::string getAlbumDir(const std::string &cdid);
 
+    const std::list<Album> &getCache() const;
+
+    const char *mediaPath() const;
+
 private:
     void loadCacheFile(const std::string &path);
     void loadCache(const std::string &path);

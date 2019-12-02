@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+#define CD_STREAM "cdda:///dev/cdrom"
+
 //#define LIB_VLC // LIB VLC causes a crash :(
 //#define LIB_MPV // just sucks (audio cd support is poor)
 
@@ -24,6 +26,15 @@ void Player::dbus(std::string cmd)
     async_process dbus_proc("/usr/bin/dbus-send", args);
     dbus_proc.exec();
     dbus_proc.wait();
+}
+
+bool Player::eject_cd()
+{
+    std::vector<std::string> args;
+    async_process eject_proc("/usr/bin/eject", args);
+    eject_proc.exec();
+    eject_proc.wait();
+    return true;
 }
 
 Player::Player()
@@ -125,6 +136,7 @@ bool Player::play(const std::string &stream)
     if(proc && !stop())
         return false;
 
+    std::cout << "Playing " << stream << std::endl;
     cur_stream = stream;
     std::vector<std::string> args;
     args.push_back("-A");
@@ -151,14 +163,14 @@ bool Player::play_cd()
     }
     return play("cdda://");
 #else
-    const bool isCD = cur_stream == "cdda:///dev/cdrom";
+    const bool isCD = cur_stream == CD_STREAM;
     if((m_playing || m_paused) && isCD)
     {
         if(m_paused)
             return pause(false);
         return true; // nothing to do - already playing a cd
     }
-    return play("cdda:///dev/cdrom");
+    return play(CD_STREAM);
 #endif
 }
 
@@ -225,6 +237,10 @@ bool Player::stop()
     m_playing = false;
     m_paused = false;
 
+    if(cur_stream == CD_STREAM)
+        eject_cd();
+    cur_stream = "";
+
     if(proc == nullptr)
         return false; // nothing to stop!
     delete proc;
@@ -243,6 +259,19 @@ bool Player::isPlaying() const
     if(m_playing && proc && !proc->active())
         return false;
     return proc != nullptr;
+#endif
+}
+
+bool Player::isPlayingCD() const
+{
+#ifdef LIB_VLC
+    return libvlc_media_player_is_playing(mp) == 1;
+#elif defined(LIB_MPV)
+    return m_playing;
+#else
+    if(m_playing && proc && !proc->active())
+        return false;
+    return proc != nullptr && cur_stream == CD_STREAM;
 #endif
 }
 
@@ -304,10 +333,27 @@ const std::shared_ptr<http_response> Player::render(const http_request &req)
         return std::shared_ptr<http_response>(new string_response(status));
 
     }
+    else if(args.count("url"))
+    {
+        // BUG: Exploit location! Not really that risky, but not great.
+        // TODO: Sanitize inputs... but we never know what they are.
+        std::cout << "size: " << args["url"].size() << std::endl;
+        if(args["url"].size() < 4)
+        {
+            std::cout << "Returning url " << cur_stream << std::endl;
+            return std::shared_ptr<http_response>(new string_response(cur_stream));
+        }
+        else if(!play(args["url"]))
+        {
+            return bad_request();
+        }
+    }
 
     if(m_paused) status = "paused";
     else if(m_playing) status = "playing";
     else status = "stopped";
+
+    std::cout << "Player Status: " << status << std::endl;
 
     return std::shared_ptr<http_response>(new string_response(status));
 }

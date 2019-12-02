@@ -19,10 +19,12 @@ public:
     bool play(); // play last stream
     bool play(const std::string &stream);
     bool play_cd();
+    bool eject_cd();
     bool pause(bool c_pause = true);
     bool changeChapter(bool fwd);
     bool stop();
     bool isPlaying() const;
+    bool isPlayingCD() const;
     const std::shared_ptr<httpserver::http_response> render(const httpserver::http_request &req);
 };
 

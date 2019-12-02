@@ -1,5 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
     <title>Thornton CD Player</title>
     <script type="text/javascript" src="/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="/interface.js"></script>
@@ -10,6 +12,7 @@
         function getStatus()
         {
             getPlayerStatus();
+            getCDStatus();
             getVolume();
             cdInfo();
         }
@@ -21,8 +24,13 @@
         <li class=menu><a href="/index.html"                >Channel</a></li>
         <li class=menu><a href="/radio.html"                >Net Radio</a></li>
         <li class=menu><a href="/cdrom.html"  class="active">CD</a></li>
-        <li class=menu><a href="/ripper.html"               >Rip CD</a></li>
-        <li class=menu_last><img id="menu_mute" onclick="mute();" src=/mute.png></img></li>
+        <li class=menu><a href="/library.html"              >Library</a></li>
+        <li class=menu_last><img id="menu_mute" onclick="mute();" src=/not_mute.png></img></li>
+    </ul>
+
+    <ul class=menu>
+        <li class=menu><a href="/cdrom.html" class="active">CD Player</a></li>
+        <li class=menu><a href="/ripper.html">CD Ripper</a></li>
     </ul>
 
     <table width=100%>

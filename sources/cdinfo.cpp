@@ -193,7 +193,8 @@ bool CDInfo::proc_cddb_read(const std::string &cddb_read)
                     m_tracks.push_back("");
                 m_tracks[title] = data;
             } catch(...) {
-                std::cerr << __PRETTY_FUNCTION__ << "Invalid read!" << std::endl << cddb_read << std::endl;
+                m_errorMessage = "Invalid read!";
+                std::cerr << __PRETTY_FUNCTION__ << m_errorMessage << std::endl << cddb_read << std::endl;
                 return false;
             }
         }
@@ -222,14 +223,16 @@ CDInfo::CDInfo(bool getTracks)
     std::string discid_data = init_discid();
     if(discid_data.empty())
     {
-        std::cerr << __PRETTY_FUNCTION__ << " No disc id result!" << std::endl;
+        m_errorMessage = " No disc id result!";
+        std::cerr << __PRETTY_FUNCTION__ << m_errorMessage << std::endl;
         return;
     }
 
     std::string cddb_query = init_cddb_query(discid_data);
     if(cddb_query.empty())
     {
-        std::cerr << __PRETTY_FUNCTION__ << " No query result!" << std::endl;
+        m_errorMessage = " No query result!";
+        std::cerr << __PRETTY_FUNCTION__ << m_errorMessage << std::endl;
         return;
     }
 
@@ -241,7 +244,8 @@ CDInfo::CDInfo(bool getTracks)
         std::string cddb_read = init_cddb_read();
         if(cddb_read.empty())
         {
-            std::cerr << __PRETTY_FUNCTION__ << " No read result!" << std::endl;
+            m_errorMessage = " No read result!";
+            std::cerr << __PRETTY_FUNCTION__ << m_errorMessage << std::endl;
             return;
         }
 
@@ -270,6 +274,16 @@ std::string CDInfo::title() const
 std::vector<std::string> CDInfo::tracks() const
 {
     return m_tracks;
+}
+
+std::string CDInfo::genre() const
+{
+    return m_genre;
+}
+
+std::string CDInfo::getError() const
+{
+    return m_errorMessage;
 }
 
 std::string CDInfo::toHTML() const

@@ -62,6 +62,16 @@ std::string MediaManager::getAlbumDir(const std::string &cdid)
     return path + '/';
 }
 
+const std::list<Album> &MediaManager::getCache() const
+{
+    return m_cache;
+}
+
+const char *MediaManager::mediaPath() const
+{
+    return m_mediaPath;
+}
+
 void MediaManager::loadCache(const std::string &path)
 {
     DIR *dir;

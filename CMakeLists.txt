@@ -2,6 +2,9 @@ PROJECT(WebAudioManager)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
 SET(CMAKE_CXX_STANDARD 11)
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 if(SIMULATION)
     INCLUDE(/home/daniel/Programs/libhttpserver/_install_x86/share/cmake/Modules/FindLibHttpServer.cmake)
     SET(MICROHTTPD /usr/lib/x86_64-linux-gnu/libmicrohttpd.so.12)
@@ -33,7 +36,9 @@ SET(CPP_FILES
     interface/ripper.cpp  interface/ripper.h
     interface/volume.cpp  interface/volume.h
     interface/radio.cpp   interface/radio.h
+    interface/library.cpp interface/library.h
 
+    sources/led.cpp sources/led.h
     sources/tunein.cpp sources/tunein.h
     sources/cdinfo.cpp sources/cdinfo.h
     sources/mediamanager.cpp sources/mediamanager.h
@@ -43,16 +48,19 @@ SET(HTML_FILES
     www/index.html
     www/radio.html
     www/cdrom.html
+    www/customradio.html
     www/ripper.html
+    www/library.html
     www/style.css
     www/interface.js
     www/jquery-3.3.1.min.js
+    www/jquery.form.min.js
     www/mute.png
     www/not_mute.png
 )
 
 ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${CPP_FILES})
-TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} PRIVATE ${LIBHTTPSERVER_LIBRARIES} ${MICROHTTPD} curl curlpp)
+TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} PRIVATE ${LIBHTTPSERVER_LIBRARIES} ${MICROHTTPD} Threads::Threads curl curlpp)
 TARGET_INCLUDE_DIRECTORIES(${CMAKE_PROJECT_NAME} PRIVATE ${LIBHTTPSERVER_INCLUDE_DIRS}/ ${CMAKE_SOURCE_DIR})
 
 ADD_CUSTOM_TARGET(HTML_Files SOURCES ${HTML_FILES})

@@ -15,8 +15,8 @@ public:
     std::vector<TuneIN::result> lastResults;
     TuneIN::result nowPlaying;
 
-    pRadio(Player &player) :
-        player(player)
+    pRadio(Player *player) :
+        player(*player)
     {
 
     }
@@ -71,7 +71,7 @@ public:
         std::stringstream s;
         s << "<table id=radio>"
              "<tr>"
-             "<td><button class=radio id=start onclick='startPlayer()'>Start</button></td>"
+             "<td><button class=radio id=start onclick='startPlayer()' class='active'>Start</button></td>"
              "<td><button class=radio id=pause onclick='pausePlayer()'>Pause</button></td>"
              "<td><button class=radio id=stop  onclick='stopPlayer()' >Stop</button></td>"
              "</tr>"
@@ -162,7 +162,7 @@ public:
     }
 };
 
-Radio::Radio(Player &player) : p(new pRadio(player))
+Radio::Radio(Player *player) : p(new pRadio(player))
 {
 
 }

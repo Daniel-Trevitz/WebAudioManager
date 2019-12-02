@@ -1,11 +1,15 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
+#include <httpserverpp>
 
-class Library
+class Library : public httpserver::http_resource
 {
+    class pLibrary *p;
 public:
-    Library();
+    Library(class MediaManager *mm, class Player *player);
+    ~Library();
+    const std::shared_ptr<httpserver::http_response> render(const httpserver::http_request&);
 };
 
 #endif // LIBRARY_H

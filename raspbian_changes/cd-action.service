@@ -1,0 +1,9 @@
+[Unit]
+Description=Rip and/or play music
+
+[Service]
+User=pi
+ExecStart=/home/pi/cd-action.sh
+
+[Install]
+WantedBy=multi-user.target

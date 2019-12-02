@@ -1,51 +1,27 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
     <title>Thornton CD Ripper</title>
     <script type="text/javascript" src="/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="/interface.js"></script>
     <link rel="stylesheet" href="style.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-
-    <script type="text/javascript">
-        function getStatus()
-        {
-            getVolume();
-        }
-    </script>
 </head>
-<body onload="getStatus()">
+<body onload="getAlbumForm()">
 
     <ul class=menu>
         <li class=menu><a href="/index.html"                >Channel</a></li>
         <li class=menu><a href="/radio.html"                >Net Radio</a></li>
-        <li class=menu><a href="/cdrom.html"                >CD</a></li>
-        <li class=menu><a href="/ripper.html" class="active">Rip CD</a></li>
-        <li class=menu_last><img id="menu_mute" onclick="mute();" src=/mute.png></img></li>
+        <li class=menu><a href="/cdrom.html" class="active" >CD</a></li>
+        <li class=menu><a href="/library.html"              >Library</a></li>
+        <li class=menu_last><img id="menu_mute" onclick="mute();" src=/not_mute.png></img></li>
+    </ul>
+    <ul class=menu>
+        <li class=menu><a href="/cdrom.html">CD Player</a></li>
+        <li class=menu><a href="/ripper.html" class="active">CD Ripper</a></li>
     </ul>
 
-    <table width=100%>
-        <tr>
-            <td width=10% rowspan=3><button class="volall" onclick="setVolumeAll(-1);">-</button></td>
-            <td width=10%><button class="vol" onclick="setVolume(0, -1);">-</button></td>
-            <td width=60%><input type="range" id="volume0" value="0" min=0 max=100 onchange="updateVolume()"></td>
-            <td width=10%><button class="vol" onclick="setVolume(0, +1);">+</button></td>
-            <td width=10% rowspan=3><button class="volall" onclick="setVolumeAll(+1);">+</button></td>
-        </tr>
-        <tr>
-            <td width=10%><button class="vol" onclick="setVolume(1, -1);">-</button></td>
-            <td width=60%><input type="range" id="volume1" value="0" min=0 max=100 onchange="updateVolume()"></td>
-            <td width=10%><button class="vol" onclick="setVolume(1, +1);">+</button></td>
-        </tr>
-        <tr>
-            <td width=10%><button class="vol" onclick="setVolume(2, -1);">-</button></td>
-            <td width=60%><input type="range" id="volume2" value="0" min=0 max=100 onchange="updateVolume()"></td>
-            <td width=10%><button class="vol" onclick="setVolume(2, +1);">+</button></td>
-        </tr>
-    </table>
-
-    <form action="/cgi-bin/ripper" method="post" enctype="multipart/form-data">
-        <input type="file" name="image" accept="image/*" capture="environment"></input>
-        <input type="submit">
-    </form>
+    <div id="ripper"></div>
 </body>
 </html>

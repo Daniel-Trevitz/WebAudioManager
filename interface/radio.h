@@ -8,7 +8,7 @@ class Radio : public httpserver::http_resource
 {
     class pRadio *p;
 public:
-    Radio(Player &player);
+    Radio(Player *player);
     ~Radio();
     const std::shared_ptr<httpserver::http_response> render(const httpserver::http_request &req);
 };

@@ -9,7 +9,18 @@ using namespace httpserver;
 
 Channel::Channel(Volume &volume) : m_channel(-1), m_volume(volume)
 {
+    std::ofstream gpio_export;
+    gpio_export.open ("/sys/class/gpio/export");
+    for(int i = 0; i < 5; i++)
+    {
+        gpio_export << outputs[i] << std::endl;
+    }
+    gpio_export.close();
+}
 
+bool Channel::play_from_pi()
+{
+    return set(4);
 }
 
 bool Channel::set(std::string channel)
@@ -42,17 +53,16 @@ static void write(const char *value, int pin)
 
 bool Channel::set(int channel)
 {
-    const int outputs[] =
-    {
-        26,
-        25,
-        24,
-        23,
-        22
-    };
-
     if(!m_volume.muted())
         m_volume.setMute(true);
+
+    for(int i = 0; i < 5; i++)
+    {
+        std::ofstream gpio_direction;
+        gpio_direction.open ("/sys/class/gpio/gpio" + std::to_string(outputs[i]) + "/direction");
+        gpio_direction << "out" << std::endl;
+        gpio_direction.close();
+    }
 
     for(int i = 0; i < 5; i++)
     {

@@ -2,6 +2,8 @@
 #include "utils/async_process.h"
 #include "httpserver/bad_request.h"
 
+#include "utils/json.hpp"
+
 #include <iostream>
 
 const char *Volume::address[Volume::amps] =
@@ -85,13 +87,16 @@ const std::shared_ptr<httpserver::http_response> Volume::render(const httpserver
         }
     }
 
-    const std::string str =
-            std::to_string(m_volume[0]) + ";" +
-            std::to_string(m_volume[1]) + ";" +
-            std::to_string(m_volume[2]) + ";" +
-            (m_muted ? "1" : "0");
 
-    return std::shared_ptr<httpserver::http_response>(new httpserver::string_response(str));
+    nlohmann::json j;
+
+    for(size_t i = 0; i < 3; i++)
+        j[std::to_string(i)] = m_volume[i];
+
+    j["muted"] = (m_muted ? "1" : "0");
+
+    using namespace httpserver;
+    return std::shared_ptr<http_response>(new string_response(j.dump(1)));
 }
 
 void Volume::increaseVolumes(int delta)
@@ -202,6 +207,8 @@ void Volume::getVolumes()
 void Volume::set(int speaker, int volume)
 {
     const int cmdvol = int(double(volume) * 0.60);
+
+    // std::cout << "Vol CMD: " << cmdvol << std::endl;
 
     std::vector<std::string> args;
         args.push_back("-y");
