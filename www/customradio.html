@@ -24,6 +24,7 @@
         <li class=menu><a href="/radio.html"  class="active">Net Radio</a></li>
         <li class=menu><a href="/cdrom.html"                >CD</a></li>
         <li class=menu><a href="/library.html"              >Library</a></li>
+        <li class=menu><a href="/settings.html"             >Settings</a></li>
         <li class=menu_last><img id="menu_mute" onclick="mute();" src=/not_mute.png></img></li>
     </ul>
 
@@ -32,25 +33,7 @@
         <li class=menu><a href="/customradio.html" class="active">Custom Radio URL</a></li>
     </ul>
 
-    <table width=100%>
-        <tr>
-            <td width=10% rowspan=3><button class="volall" onclick="setVolumeAll(-1);">-</button></td>
-            <td width=10%><button class="vol" onclick="setVolume(0, -1);">-</button></td>
-            <td width=60%><input type="range" id="volume0" value="0" min=0 max=100 onchange="updateVolume()"></td>
-            <td width=10%><button class="vol" onclick="setVolume(0, +1);">+</button></td>
-            <td width=10% rowspan=3><button class="volall" onclick="setVolumeAll(+1);">+</button></td>
-        </tr>
-        <tr>
-            <td width=10%><button class="vol" onclick="setVolume(1, -1);">-</button></td>
-            <td width=60%><input type="range" id="volume1" value="0" min=0 max=100 onchange="updateVolume()"></td>
-            <td width=10%><button class="vol" onclick="setVolume(1, +1);">+</button></td>
-        </tr>
-        <tr>
-            <td width=10%><button class="vol" onclick="setVolume(2, -1);">-</button></td>
-            <td width=60%><input type="range" id="volume2" value="0" min=0 max=100 onchange="updateVolume()"></td>
-            <td width=10%><button class="vol" onclick="setVolume(2, +1);">+</button></td>
-        </tr>
-    </table>
+    <div id="volume"></div>
 
     <input type="text" id="url_entry" width=80%></input>
     <br/>

@@ -24,6 +24,7 @@
         <li class=menu><a href="/radio.html"                >Net Radio</a></li>
         <li class=menu><a href="/cdrom.html"                >CD</a></li>
         <li class=menu><a href="/library.html"              >Library</a></li>
+        <li class=menu><a href="/settings.html"             >Settings</a></li>
         <li class=menu_last><img id="menu_mute" onclick="mute();" src=/not_mute.png></img></li>
     </ul>
 
@@ -41,32 +42,14 @@
         </tr>
         <tr>
             <td width=33% ><button class="ch" id="ch-2" onclick="setChannel(2);">Phonograph</button></td>
-            <td width=33% ><button class="ch" id="ch-3" onclick="setChannel(3);">Multi Disc</button></td>
+            <td width=33% ><button class="ch" id="ch-3" onclick="setChannel(3);">CD Changer</button></td>
             <td width=33% ><button class="ch" id="ch-4" onclick="setChannel(4);">AudioRx</button></td>
         </tr>
     </table>
 
     <br/>
 
-    <table width=100%>
-        <tr>
-            <td width=10% rowspan=3><button class="volall" onclick="setVolumeAll(-1);">-</button></td>
-            <td width=10%><button class="vol" onclick="setVolume(0, -1);">-</button></td>
-            <td width=60%><input type="range" id="volume0" value="0" min=0 max=100 onchange="updateVolume()"></td>
-            <td width=10%><button class="vol" onclick="setVolume(0, +1);">+</button></td>
-            <td width=10% rowspan=3><button class="volall" onclick="setVolumeAll(+1);">+</button></td>
-        </tr>
-        <tr>
-            <td width=10%><button class="vol" onclick="setVolume(1, -1);">-</button></td>
-            <td width=60%><input type="range" id="volume1" value="0" min=0 max=100 onchange="updateVolume()"></td>
-            <td width=10%><button class="vol" onclick="setVolume(1, +1);">+</button></td>
-        </tr>
-        <tr>
-            <td width=10%><button class="vol" onclick="setVolume(2, -1);">-</button></td>
-            <td width=60%><input type="range" id="volume2" value="0" min=0 max=100 onchange="updateVolume()"></td>
-            <td width=10%><button class="vol" onclick="setVolume(2, +1);">+</button></td>
-        </tr>
-    </table>
+    <div id="volume"></div>
 
 </body>
 </html>

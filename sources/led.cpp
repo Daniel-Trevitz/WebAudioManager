@@ -77,7 +77,7 @@ void LED::update()
     size_t length = 0x17;
     if (write(file_i2c, buffer, length) != ssize_t(length))
     {
-        std::cout << "Failed to write to the i2c bus. " << length << " " << errno << std::endl;
+        std::cout << "Failed to write to the i2c bus. " << length << " " << errno << " " << file_i2c << std::endl;
     }
 }
 
@@ -92,15 +92,15 @@ LED::LED()
     if ((file_i2c = open("/dev/i2c-1", O_RDWR)) < 0)
     {
         //ERROR HANDLING: you can check errno to see what went wrong
-        printf("Failed to open the i2c bus");
+        std::cerr << "Failed to open the i2c bus: " << errno << " " << file_i2c << std::endl;
         return;
     }
 
     int addr = 0x54;          //<<<<<The I2C address of the slave
     if (ioctl(file_i2c, I2C_SLAVE, addr) < 0)
     {
-        std::cout << "Failed to acquire bus access and/or talk to slave." << std::endl;
         //ERROR HANDLING; you can check errno to see what went wrong
+        std::cerr << "Failed to acquire bus access and/or talk to slave. " << errno <<  " " << file_i2c << std::endl;
         return;
     }
 
@@ -137,7 +137,7 @@ void LED::shutdown(bool off)
     if (write(file_i2c, buffer, length) != ssize_t(length))          //write() returns the number of bytes actually written, if it doesn't match then an error occurred (e.g. no response from the device)
     {
         /* ERROR HANDLING: i2c transaction failed */
-        std::cout << "Failed to write %i to the i2c bus." << std::endl;
+        std::cout << "Failed to write %i to the i2c bus." << errno << " " << file_i2c << std::endl;
     }
 }
 

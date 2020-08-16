@@ -27,7 +27,7 @@ public:
     bool set(std::string channel);
 
     // get the current channel
-    int get();
+    int get() const;
 
     const std::shared_ptr<httpserver::http_response> render(const httpserver::http_request&);
 };

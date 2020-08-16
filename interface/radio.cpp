@@ -71,9 +71,9 @@ public:
         std::stringstream s;
         s << "<table id=radio>"
              "<tr>"
-             "<td><button class=radio id=start onclick='startPlayer()' class='active'>Start</button></td>"
+             "<td><button class=radio id=start onclick='startPlayer()'>Start</button></td>"
              "<td><button class=radio id=pause onclick='pausePlayer()'>Pause</button></td>"
-             "<td><button class=radio id=stop  onclick='stopPlayer()' >Stop</button></td>"
+             "<td><button class=radio id=stop  onclick='stopRadioPlayer()' >Stop</button></td>"
              "</tr>"
              "</table>";
 
@@ -100,6 +100,9 @@ public:
         s << "<table id=radio width=60%>";
 
         std::stringstream stations,menu;
+
+        if(lastResults.empty() && !begin())
+            return "Failed to get radio stations!";
 
         for(size_t i = 0; i < lastResults.size(); i++)
         {
@@ -179,8 +182,8 @@ const std::shared_ptr<http_response> Radio::render(const http_request &req)
         auto args = req.get_args();
         if(args.count("begin_nav"))
         {
-            // Start navigation from the base URL - called when Radio.html is loaded
-            p->begin();
+            if(!p->player.isPlaying()) // don't reload all the time
+                p->begin(); // Start navigation from the base URL - called when Radio.html is loaded
         }
         else if(args.count("play"))
         {

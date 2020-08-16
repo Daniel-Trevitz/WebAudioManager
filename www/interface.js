@@ -136,10 +136,38 @@ function updateVolume()
 
 function updateVolumeHTML(data)
 {
+    document.getElementById('volume').innerHTML = "<table width=100%>"
+        + "<tr><td width=100% colspan='3'><div id='label_vol0' align='center'>Room 0</div></td></tr>"
+        + "<tr>"
+        + "    <td width=10%><button class='vol' onclick='setVolume(0, -1);'>-</button></td>"
+        + "    <td width=60%><input type='range' id='volume0' value='0' min=0 max=100 onchange='updateVolume()'></td>"
+        + "    <td width=10%><button class='vol' onclick='setVolume(0, +1);'>+</button></td>"
+        + "</tr>"
+        + "<tr><td width=100% colspan='3'><div id='label_vol1' align='center'>Room 1</div></td></tr>"
+        + "<tr>"
+        + "    <td width=10%><button class='vol' onclick='setVolume(1, -1);'>-</button></td>"
+        + "    <td width=60%><input type='range' id='volume1' value='0' min=0 max=100 onchange='updateVolume()'></td>"
+        + "    <td width=10%><button class='vol' onclick='setVolume(1, +1);'>+</button></td>"
+        + "</tr>"
+        + "<tr><td width=100% colspan='3'><div id='label_vol2' align='center'>Room 2</div></td></tr>"
+        + "<tr>"
+        + "    <td width=10%><button class='vol' onclick='setVolume(2, -1);'>-</button></td>"
+        + "    <td width=60%><input type='range' id='volume2' value='0' min=0 max=100 onchange='updateVolume()'></td>"
+        + "    <td width=10%><button class='vol' onclick='setVolume(2, +1);'>+</button></td>"
+        + "</tr>"
+        + "</table>";
+
     document.getElementById("volume0").value = data["0"];
     document.getElementById("volume1").value = data["1"];
     document.getElementById("volume2").value = data["2"];
 
+    document.getElementById("volume0").max = data["max"];
+    document.getElementById("volume1").max = data["max"];
+    document.getElementById("volume2").max = data["max"];
+
+    document.getElementById("label_vol0").innerHTML = "Family Room";
+    document.getElementById("label_vol1").innerHTML = "Living Room";
+    document.getElementById("label_vol2").innerHTML = "Kitchen";
     if(data["muted"] === "0")
     {
         document.getElementById("menu_mute").src = "/not_mute.png"
@@ -212,6 +240,15 @@ function stopPlayer()
     });
 }
 
+function stopRadioPlayer()
+{
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/player?stop',
+      success: function(data) { beginRadio(); }
+    });
+}
+
 /*********************************************************************/
 /* CD Player code */
 
@@ -272,7 +309,11 @@ function getPlayerURL(func)
 
 function updateCD_PlayerStatus(status)
 {
-    if(status === "playing")
+    if(document.getElementById("start") === null)
+    {
+        // Avoid nulls for radio
+    }
+    else if(status === "playing")
     {
         document.getElementById("start").className = "radio_active";
         document.getElementById("pause").className = "radio";
@@ -340,6 +381,7 @@ function selectRadioSearch(elem)
 function updateRadio(data)
 {
     document.getElementById("radio").innerHTML = data;
+    getPlayerStatus();
 }
 
 function getRadioURL()
@@ -402,5 +444,68 @@ function postAlbum(event)
     /* Put the results in a div */
     posting.done(function(data) {
         console.log(data);
+    });
+}
+
+/*********************************************************************/
+/* Settings code */
+
+function getBrightness()
+{
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/settings?led_brightness',
+      success: function(data) {
+          document.getElementById("brightness_entry").value = data;
+      }
+    });
+}
+
+function setBrightness()
+{
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/settings?led_brightness=' + document.getElementById("brightness_entry").value
+    });
+}
+
+function getMaxVolume()
+{
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/settings?max_volume',
+      success: function(data) {
+          document.getElementById("volume_max_entry").value = data;
+      }
+    });
+}
+
+function setMaxVolume()
+{
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/settings?max_volume=' + document.getElementById("volume_max_entry").value
+    });
+}
+
+function powerOffCheck()
+{
+    if (!confirm("This will poweroff the device.\nTo power back on you must press the button behind the amplifier."))
+        return;
+
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/settings?poweroff'
+    });
+}
+
+function rebootCheck()
+{
+    if (!confirm("This will reboot the device."))
+        return;
+
+    $.ajax({
+      type:'get',
+      url:'cgi-bin/settings?reboot'
     });
 }

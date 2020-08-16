@@ -71,6 +71,9 @@ bool Player::play()
     std::cout << __PRETTY_FUNCTION__ << std::endl;
 
     if(cur_stream.empty())
+        cur_stream = prev_stream;
+
+    if(cur_stream.empty())
         return false;
 
 #ifdef LIB_VLC
@@ -239,6 +242,8 @@ bool Player::stop()
 
     if(cur_stream == CD_STREAM)
         eject_cd();
+
+    prev_stream = cur_stream;
     cur_stream = "";
 
     if(proc == nullptr)
@@ -247,6 +252,11 @@ bool Player::stop()
     proc = nullptr;
     return true;
 #endif
+}
+
+bool Player::isPaused() const
+{
+    return m_paused;
 }
 
 bool Player::isPlaying() const

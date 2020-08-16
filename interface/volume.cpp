@@ -1,22 +1,42 @@
 #include "volume.h"
 #include "utils/async_process.h"
 #include "httpserver/bad_request.h"
+#include "device_interaction.h"
 
 #include "utils/json.hpp"
 
 #include <iostream>
 
-const char *Volume::address[Volume::amps] =
-{
-    "0x49",
-    "0x4A",
-    "0x4B"
-};
+#include <unistd.h>                     //Needed for I2C port
+#include <fcntl.h>                      //Needed for I2C port
+#include <sys/ioctl.h>                  //Needed for I2C port
+#include <linux/i2c-dev.h>              //Needed for I2C port
 
 Volume::Volume()
 {
     for(int i = 0; i < amps; i++)
-        setVolume(i,0);
+    {
+        //----- OPEN THE I2C BUS -----
+        if ((file_i2c[i] = open("/dev/i2c-1", O_RDWR)) < 0)
+        {
+            //ERROR HANDLING: you can check errno to see what went wrong
+            std::cerr << "Failed to open the i2c bus: " << errno << " " << file_i2c[i] << std::endl;
+            return;
+        }
+
+        if (ioctl(file_i2c[i], I2C_SLAVE, address[i]) < 0)
+        {
+            //ERROR HANDLING; you can check errno to see what went wrong
+            std::cerr << "Failed to acquire bus access and/or talk to slave. " << errno << std::endl;
+            return;
+        }
+    }
+}
+
+Volume::~Volume()
+{
+    for(int i = 0; i < amps; i++)
+        close(file_i2c[i]);
 }
 
 const std::shared_ptr<httpserver::http_response> Volume::render(const httpserver::http_request &req)
@@ -25,7 +45,7 @@ const std::shared_ptr<httpserver::http_response> Volume::render(const httpserver
 
     if(args.size() == 0)
     {
-        getVolumes();
+
     }
     else if(args.count("mute"))
     {
@@ -94,6 +114,7 @@ const std::shared_ptr<httpserver::http_response> Volume::render(const httpserver
         j[std::to_string(i)] = m_volume[i];
 
     j["muted"] = (m_muted ? "1" : "0");
+    j["max"] = maxVolume;
 
     using namespace httpserver;
     return std::shared_ptr<http_response>(new string_response(j.dump(1)));
@@ -170,6 +191,7 @@ void Volume::increaseVolume(int speaker, int delta)
 // Mute by settin the volumes to zero, but not overwriting the previous state
 void Volume::setMute(bool mute)
 {
+    // std::cout << "Muting " << mute << std::endl;
     m_muted = mute;
     if(mute)
     {
@@ -185,6 +207,7 @@ void Volume::setMute(bool mute)
 
 bool Volume::muted() const
 {
+    // std::cout << "Muted? " << std::endl;
     return m_muted;
 }
 
@@ -198,25 +221,37 @@ void Volume::setVolume(int speaker, int volume)
     set(speaker, volume);
 }
 
-void Volume::getVolumes()
+void Volume::setMaxVolume(int maxVolume)
 {
-    // TODO: implement - not actually needed (even a little bit)
+    this->maxVolume = maxVolume;
+}
+
+int Volume::getMaxVolume() const
+{
+    return maxVolume;
+}
+
+int Volume::getVolume(int speaker)
+{
+    if(speaker < 0 || speaker >= amps)
+        return -1;
+
+    return m_volume[speaker];
 }
 
 // TODO: Replace with real i2c call?
 void Volume::set(int speaker, int volume)
 {
-    const int cmdvol = int(double(volume) * 0.60);
+    const uint8_t cmdvol = uint8_t(double(volume) * 0.60);
 
-    // std::cout << "Vol CMD: " << cmdvol << std::endl;
+    if((speaker < 0) || (speaker >= amps) || (file_i2c[speaker] < 0))
+        return;
 
-    std::vector<std::string> args;
-        args.push_back("-y");
-        args.push_back("1");
-        args.push_back(address[speaker]);
-        args.push_back(std::to_string(cmdvol));
+    //std::cout << "Vol CMD: " << speaker << " " << cmdvol << std::endl;
 
-    async_process proc("/usr/sbin/i2cget", args);
-    proc.exec();
-    proc.wait();
+    int ret = write(file_i2c[speaker], &cmdvol, 1);
+    if(ret != 1)
+        std::cerr << "Failed i2c write for volume! " << errno << " " << ret<< file_i2c[speaker] << std::endl;
+
+    Settings::SaveVolumes();
 }

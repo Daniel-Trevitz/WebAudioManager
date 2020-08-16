@@ -53,6 +53,9 @@ static void write(const char *value, int pin)
 
 bool Channel::set(int channel)
 {
+    if(m_channel == channel)
+        return true;
+
     if(!m_volume.muted())
         m_volume.setMute(true);
 
@@ -89,7 +92,7 @@ bool Channel::set(int channel)
 }
 
 
-int Channel::get()
+int Channel::get() const
 {
     return m_channel;
 }

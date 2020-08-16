@@ -13,6 +13,15 @@ img.radio_img_play { width: 80px; height: auto; }
 button.radio_btn { width: 100%; font-size: 100%; }
 
 
+input[type="number"], input[type="text"] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
 
 /* Menu Bar - curtisy w3schools */
 ul.menu {
@@ -62,7 +71,6 @@ button.vol    { min-width: 20px; width: 100%; height:  80px; font-size: 100%; bo
 button.volall { min-width: 20px; width: 100%; height: 250px; font-size: 100%; border: none; background-color: #aaaaaa; color: white; }
 
 input[type="range"] {
-
   margin: auto;
   -webkit-appearance: none;
   position: relative;

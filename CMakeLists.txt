@@ -22,6 +22,8 @@ ENDIF()
 
 SET(CPP_FILES
     main.cpp
+    device_interaction.cpp
+    device_interaction.h
 
     utils/json.hpp
     utils/mkpath.cpp utils/mkpath.h
@@ -37,8 +39,10 @@ SET(CPP_FILES
     interface/volume.cpp  interface/volume.h
     interface/radio.cpp   interface/radio.h
     interface/library.cpp interface/library.h
+    interface/settings.cpp interface/settings.h
 
     sources/led.cpp sources/led.h
+    sources/touch.cpp  sources/touch.h
     sources/tunein.cpp sources/tunein.h
     sources/cdinfo.cpp sources/cdinfo.h
     sources/mediamanager.cpp sources/mediamanager.h
@@ -51,6 +55,7 @@ SET(HTML_FILES
     www/customradio.html
     www/ripper.html
     www/library.html
+    www/settings.html
     www/style.css
     www/interface.js
     www/jquery-3.3.1.min.js
