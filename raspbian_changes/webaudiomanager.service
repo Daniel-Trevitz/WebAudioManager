@@ -1,0 +1,11 @@
+[Unit]
+Description=Music Interface
+
+[Service]
+User=pi
+Restart=always
+WorkingDirectory=/home/pi/www
+ExecStart=/home/pi/www/WebAudioManager
+
+[Install]
+WantedBy=multi-user.target
